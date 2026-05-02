@@ -200,14 +200,11 @@
         .s-time { font-family: var(--font-mono); font-size: 14px; }
         .s-target { font-family: var(--font-mono); font-size: 16px; font-weight: 700; text-align: right; }
 
-        /* --- THE ORACLE --- */
+        /* --- THE ORACLE (Gemini AI) --- */
         .oracle-container { background: var(--dark); color: #fff; padding: 80px; margin-bottom: 100px; box-shadow: 15px 15px 0px var(--accent); border: 1px solid var(--border); }
-        .oracle-step { display: none; }
-        .oracle-step.active { display: block; animation: fadeIn 0.4s ease forwards; }
-        .option-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 40px 0; }
-        .option-box { border: 1px solid rgba(255,255,255,0.2); padding: 30px 20px; cursor: pointer; transition: 0.2s; text-align: center; background: rgba(255,255,255,0.02); }
-        .option-box:hover { background: var(--accent); color: var(--dark); border-color: var(--accent); transform: translateY(-5px); }
-        .option-box i { font-size: 32px; margin-bottom: 15px; }
+        .ai-chat-box { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .ai-chat-box textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 20px; font-family: var(--font-main); font-size: 16px; resize: vertical; min-height: 120px; outline: none; transition: 0.3s; }
+        .ai-chat-box textarea:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(57,255,20,0.2); }
 
         /* --- CARRITO (Drawer) --- */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2999; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(5px); }
@@ -254,7 +251,7 @@
         </a>
         <div class="nav-links">
             <a href="#/shop" class="nav-link" data-target="shop">Catálogo</a>
-            <a href="#/oracle" class="nav-link" data-target="oracle">Sensory Oracle</a>
+            <a href="#/oracle" class="nav-link" data-target="oracle">AI Oracle</a>
             <a href="#/lab" class="nav-link" data-target="lab">Brew Lab</a>
             <a href="#/about" class="nav-link" data-target="about">Nosotros</a>
         </div>
@@ -396,44 +393,36 @@
     <div id="product-target"></div>
 </main>
 
-<!-- THE ORACLE -->
+<!-- THE ORACLE (GEMINI AI INTEGRATION) -->
 <main id="oracle" class="view container">
     <div class="oracle-container reveal">
-        <h2 style="font-family: var(--font-head); font-size: 48px; color: var(--accent); margin-bottom: 20px; text-transform: uppercase;">Sensory Oracle</h2>
-        <p style="font-size: 18px; margin-bottom: 40px; color: #aaa;">Encontraremos tu match perfecto mediante calibración de datos técnicos.</p>
-
-        <div class="oracle-step active" id="o-step-1">
-            <h3 style="font-size: 24px;">Paso 1: ¿Conoces tu perfil sensorial?</h3>
-            <div class="option-grid">
-                <div class="option-box" onclick="setOracleStep(2)"><i class="fa-solid fa-brain"></i><h3>Sí, me gusta explorar</h3><p style="font-size:12px; color:#aaa;">Calibrar mi paladar</p></div>
-                <div class="option-box" onclick="viewProduct(42)"><i class="fa-solid fa-box-open"></i><h3>No estoy seguro</h3><p style="font-size:12px; color:#aaa;">Recomiéndame un Tasting Flight</p></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <h2 style="font-family: var(--font-head); font-size: 48px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase;">AI Sensory Oracle</h2>
+                <p style="font-size: 18px; margin-bottom: 20px; color: #aaa;">Describe tu café ideal. Nuestra inteligencia artificial buscará tu match en el archivo.</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-microchip" style="font-size: 40px; color: var(--accent);"></i>
             </div>
         </div>
 
-        <div class="oracle-step" id="o-step-2">
-            <h3 style="font-size: 24px;">Paso 2: ¿Qué nivel de acidez prefieres?</h3>
-            <div class="option-grid">
-                <div class="option-box" onclick="oracleData.acidity='low'; setOracleStep(3)"><h3>Baja</h3><p style="font-size:12px; color:#aaa;">Sabores redondos y pesados.</p></div>
-                <div class="option-box" onclick="oracleData.acidity='mid'; setOracleStep(3)"><h3>Media</h3><p style="font-size:12px; color:#aaa;">Equilibrio jugoso.</p></div>
-                <div class="option-box" onclick="oracleData.acidity='high'; setOracleStep(3)"><h3>Alta / Brillante</h3><p style="font-size:12px; color:#aaa;">Eléctrica y frutal.</p></div>
-            </div>
+        <div class="ai-chat-box">
+            <textarea id="ai-oracle-input" placeholder="Ej: Busco un café frutal y brillante para preparar en V60 por la mañana. No quiero nada oscuro ni ahumado..."></textarea>
+            <button class="btn btn-neon" onclick="consultOracle()" id="btn-oracle-submit"><i class="fa-solid fa-wand-magic-sparkles"></i> Analizar Catálogo</button>
         </div>
 
-        <div class="oracle-step" id="o-step-3">
-            <h3 style="font-size: 24px;">Paso 3: Notas de Sabor Deseadas</h3>
-            <div class="option-grid">
-                <div class="option-box" onclick="oracleData.flavor='choc'; setOracleStep(4)"><i class="fa-solid fa-cookie"></i><h3>Chocolate & Nueces</h3></div>
-                <div class="option-box" onclick="oracleData.flavor='fruit'; setOracleStep(4)"><i class="fa-solid fa-lemon"></i><h3>Frutos Rojos & Flores</h3></div>
-                <div class="option-box" onclick="oracleData.flavor='funky'; setOracleStep(4)"><i class="fa-solid fa-flask"></i><h3>Exótico & Fermentado</h3></div>
-            </div>
+        <div id="ai-oracle-loader" style="display: none; margin-top: 40px; text-align: center; color: var(--accent);">
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 40px;"></i>
+            <p style="margin-top: 15px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;">CALIBRANDO RED NEURONAL SENSORIAL...</p>
         </div>
 
-        <div class="oracle-step" id="o-step-4">
-            <h3 style="font-size: 24px;">Paso 4: Método de Preparación Principal</h3>
-            <div class="option-grid">
-                <div class="option-box" onclick="oracleData.method='espresso'; finishOracle()"><i class="fa-solid fa-fire"></i><h3>Espresso / Moka</h3></div>
-                <div class="option-box" onclick="oracleData.method='filter'; finishOracle()"><i class="fa-solid fa-filter"></i><h3>Filtro / V60</h3></div>
-                <div class="option-box" onclick="oracleData.method='immersion'; finishOracle()"><i class="fa-solid fa-compress"></i><h3>Prensa Francesa</h3></div>
+        <div id="ai-oracle-results" style="margin-top: 40px; display: none;">
+            <div id="ai-oracle-message" style="font-size: 16px; line-height: 1.6; padding: 25px; background: rgba(57,255,20,0.05); border-left: 4px solid var(--accent); margin-bottom: 30px;">
+                <!-- AI Message appears here -->
+            </div>
+            <h3 style="font-family: var(--font-head); font-size: 24px; margin-bottom: 20px;">Matches Encontrados:</h3>
+            <div class="grid" id="ai-oracle-products" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+                <!-- Recommended products appear here -->
             </div>
         </div>
     </div>
@@ -840,20 +829,116 @@
         }
     }
 
-    // --- ORACLE LOGIC ---
-    let oracleData = { method: '', acidity: '', flavor: '' };
-    function setOracleStep(step) {
-        document.querySelectorAll('.oracle-step').forEach(s => s.classList.remove('active'));
-        document.getElementById(`o-step-${step}`).classList.add('active');
+    // --- ORACLE LOGIC CON IA GEMINI ---
+    
+    // Función auxiliar con Exponential Backoff para llamadas de red seguras
+    async function fetchWithRetry(url, options, maxRetries = 5) {
+        const delays = [1000, 2000, 4000, 8000, 16000];
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                if (i === maxRetries - 1) throw error;
+                await new Promise(resolve => setTimeout(resolve, delays[i]));
+            }
+        }
     }
-    function finishOracle() {
-        let matchId = 6; 
-        if(oracleData.method === 'filter' && oracleData.flavor === 'fruit') matchId = 2; 
-        if(oracleData.flavor === 'funky') matchId = 8; 
-        if(oracleData.method === 'espresso' && oracleData.acidity === 'low') matchId = 5; 
-        if(oracleData.acidity === 'high' && oracleData.flavor === 'fruit') matchId = 12; 
-        viewProduct(matchId);
+
+    async function consultOracle() {
+        const input = document.getElementById('ai-oracle-input').value;
+        if (!input.trim()) return showToast("Por favor, describe tu café ideal.");
+
+        document.getElementById('ai-oracle-results').style.display = 'none';
+        document.getElementById('ai-oracle-loader').style.display = 'block';
+        document.getElementById('btn-oracle-submit').disabled = true;
+
+        const apiKey = ""; 
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // Reducimos el catálogo solo a cafés para ahorrar tokens
+        const coffeeCatalog = catalog.filter(c => ['origin', 'blend', 'premium'].includes(c.cat)).map(c => ({
+            id: c.id,
+            name: c.name,
+            desc: c.desc,
+            flavors: c.flavors.join(', '),
+            process: c.trace?.proceso
+        }));
+
+        const systemPrompt = `Eres un experto barista y sommelier de café para la marca PULSO Roasters. 
+Tu tarea es recomendar 1 o 2 cafés de nuestro catálogo basados en la solicitud en lenguaje natural del usuario.
+Catálogo disponible (en formato JSON): ${JSON.stringify(coffeeCatalog)}.
+Debes responder con un tono técnico, apasionado y directo (estilo brutalista, premium). 
+Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionado.`;
+
+        const payload = {
+            contents: [{ parts: [{ text: input }] }],
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: "OBJECT",
+                    properties: {
+                        mensaje: { type: "STRING", description: "Tu explicación y recomendación técnica dirigida al usuario." },
+                        recomendados: { type: "ARRAY", items: { type: "NUMBER" }, description: "Lista con 1 o 2 IDs numéricos de los productos recomendados." }
+                    }
+                }
+            }
+        };
+
+        try {
+            const data = await fetchWithRetry(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (data.candidates && data.candidates[0].content.parts[0].text) {
+                const result = JSON.parse(data.candidates[0].content.parts[0].text);
+                renderOracleResults(result.mensaje, result.recomendados);
+            } else {
+                throw new Error("Respuesta inválida de Gemini");
+            }
+            
+        } catch (error) {
+            console.error("Error consultando al oráculo:", error);
+            showToast("Hubo un error de calibración en la IA. Por favor intenta de nuevo.");
+            document.getElementById('ai-oracle-loader').style.display = 'none';
+        } finally {
+            document.getElementById('btn-oracle-submit').disabled = false;
+        }
     }
+
+    function renderOracleResults(message, recommendedIds) {
+        document.getElementById('ai-oracle-loader').style.display = 'none';
+        const resultsDiv = document.getElementById('ai-oracle-results');
+        resultsDiv.style.display = 'block';
+        
+        document.getElementById('ai-oracle-message').innerHTML = `<strong>El Oráculo ha hablado:</strong><br><br>${message}`;
+        
+        const productsGrid = document.getElementById('ai-oracle-products');
+        
+        // Asegurarnos que ids recomendados son válidos
+        const safeIds = Array.isArray(recommendedIds) ? recommendedIds : [];
+        const recommendedProducts = catalog.filter(p => safeIds.includes(p.id));
+        
+        if (recommendedProducts.length > 0) {
+            productsGrid.innerHTML = recommendedProducts.map(p => `
+                <div class="card" onclick="viewProduct(${p.id})" style="background:var(--surface); border:1px solid rgba(255,255,255,0.2);">
+                    <div class="card-img" style="padding: 15px;"><img src="${p.img}" style="filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));"></div>
+                    <div class="card-body" style="padding: 15px;">
+                        <div class="card-meta" style="background:var(--accent); color:var(--dark);">${p.badge}</div>
+                        <h4 style="font-family:var(--font-head); font-size:16px; color:var(--dark); margin-top:5px;">${p.name}</h4>
+                        <span style="font-weight:800; font-size:14px; margin-top:10px; display:block; color:var(--dark);">${formatCLP(p.basePrice)}</span>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            productsGrid.innerHTML = '<p style="color:#aaa;">No encontramos un match exacto. ¡Intenta modificando tu búsqueda!</p>';
+        }
+    }
+
 
     // --- BREW LAB INTELIGENTE (Mejorado con barra de progreso) ---
     let brewTimer = null;
