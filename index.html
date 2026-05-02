@@ -228,9 +228,10 @@
         .oracle-step { display: none; }
         .oracle-step.active { display: block; animation: fadeIn 0.4s ease forwards; }
         .option-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 40px 0; }
-        .option-box { border: 1px solid rgba(255,255,255,0.2); padding: 30px 20px; cursor: pointer; transition: 0.2s; text-align: center; background: rgba(255,255,255,0.02); }
+        .option-box { border: 1px solid rgba(255,255,255,0.2); padding: 30px 20px; cursor: pointer; transition: 0.2s; text-align: center; background: rgba(255,255,255,0.02); display: flex; flex-direction: column; align-items: center; justify-content: center;}
         .option-box:hover { background: var(--accent); color: var(--dark); border-color: var(--accent); transform: translateY(-5px); }
         .option-box i { font-size: 32px; margin-bottom: 15px; }
+        .option-box p { font-size:12px; margin-top: 5px; opacity: 0.7; }
 
         .ai-chat-box { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
         .ai-chat-box textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 20px; font-family: var(--font-main); font-size: 16px; resize: vertical; min-height: 120px; outline: none; transition: 0.3s; }
@@ -452,41 +453,60 @@
             </div>
         </div>
 
-        <!-- FLUJO MANUAL -->
+        <!-- FLUJO MANUAL EXTENDIDO -->
         <div id="oracle-manual-flow">
             <div class="oracle-step active" id="o-step-1">
-                <h3 style="font-size: 24px;">Paso 1: ¿Conoces tu perfil sensorial?</h3>
+                <h3 style="font-size: 24px;">Paso 1: Método de Preparación Principal</h3>
                 <div class="option-grid">
-                    <div class="option-box" onclick="setOracleStep(2)"><i class="fa-solid fa-brain"></i><h3>Sí, me gusta explorar</h3><p style="font-size:12px; color:#aaa;">Calibrar mi paladar</p></div>
-                    <div class="option-box" onclick="viewProduct(42)"><i class="fa-solid fa-box-open"></i><h3>No estoy seguro</h3><p style="font-size:12px; color:#aaa;">Recomiéndame un Tasting Flight</p></div>
+                    <div class="option-box" onclick="oracleData.method='espresso'; setOracleStep(2)"><i class="fa-solid fa-fire"></i><h3>Espresso / Moka</h3></div>
+                    <div class="option-box" onclick="oracleData.method='filter'; setOracleStep(2)"><i class="fa-solid fa-filter"></i><h3>Filtro / V60</h3></div>
+                    <div class="option-box" onclick="oracleData.method='immersion'; setOracleStep(2)"><i class="fa-solid fa-compress"></i><h3>Prensa Francesa</h3></div>
                 </div>
             </div>
 
             <div class="oracle-step" id="o-step-2">
                 <h3 style="font-size: 24px;">Paso 2: ¿Qué nivel de acidez prefieres?</h3>
                 <div class="option-grid">
-                    <div class="option-box" onclick="oracleData.acidity='low'; setOracleStep(3)"><h3>Baja</h3><p style="font-size:12px; color:#aaa;">Sabores redondos y pesados.</p></div>
-                    <div class="option-box" onclick="oracleData.acidity='mid'; setOracleStep(3)"><h3>Media</h3><p style="font-size:12px; color:#aaa;">Equilibrio jugoso.</p></div>
-                    <div class="option-box" onclick="oracleData.acidity='high'; setOracleStep(3)"><h3>Alta / Brillante</h3><p style="font-size:12px; color:#aaa;">Eléctrica y frutal.</p></div>
+                    <div class="option-box" onclick="oracleData.acidity='low'; setOracleStep(3)"><h3>Baja</h3><p>Sabores redondos y pesados.</p></div>
+                    <div class="option-box" onclick="oracleData.acidity='mid'; setOracleStep(3)"><h3>Media</h3><p>Equilibrio jugoso.</p></div>
+                    <div class="option-box" onclick="oracleData.acidity='high'; setOracleStep(3)"><h3>Alta / Brillante</h3><p>Eléctrica y frutal.</p></div>
                 </div>
             </div>
 
             <div class="oracle-step" id="o-step-3">
-                <h3 style="font-size: 24px;">Paso 3: Notas de Sabor Deseadas</h3>
+                <h3 style="font-size: 24px;">Paso 3: ¿Qué cuerpo / textura buscas en taza?</h3>
                 <div class="option-grid">
-                    <div class="option-box" onclick="oracleData.flavor='choc'; setOracleStep(4)"><i class="fa-solid fa-cookie"></i><h3>Chocolate & Nueces</h3></div>
-                    <div class="option-box" onclick="oracleData.flavor='fruit'; setOracleStep(4)"><i class="fa-solid fa-lemon"></i><h3>Frutos Rojos & Flores</h3></div>
-                    <div class="option-box" onclick="oracleData.flavor='funky'; setOracleStep(4)"><i class="fa-solid fa-flask"></i><h3>Exótico & Fermentado</h3></div>
+                    <div class="option-box" onclick="oracleData.body='light'; setOracleStep(4)"><h3>Ligero</h3><p>Como un té, elegante.</p></div>
+                    <div class="option-box" onclick="oracleData.body='mid'; setOracleStep(4)"><h3>Medio</h3><p>Sedoso y suave.</p></div>
+                    <div class="option-box" onclick="oracleData.body='heavy'; setOracleStep(4)"><h3>Pesado</h3><p>Denso y cremoso.</p></div>
                 </div>
             </div>
 
             <div class="oracle-step" id="o-step-4">
-                <h3 style="font-size: 24px;">Paso 4: Método de Preparación Principal</h3>
+                <h3 style="font-size: 24px;">Paso 4: Relación Dulzor vs Amargor</h3>
                 <div class="option-grid">
-                    <div class="option-box" onclick="oracleData.method='espresso'; finishOracle()"><i class="fa-solid fa-fire"></i><h3>Espresso / Moka</h3></div>
-                    <div class="option-box" onclick="oracleData.method='filter'; finishOracle()"><i class="fa-solid fa-filter"></i><h3>Filtro / V60</h3></div>
-                    <div class="option-box" onclick="oracleData.method='immersion'; finishOracle()"><i class="fa-solid fa-compress"></i><h3>Prensa Francesa</h3></div>
+                    <div class="option-box" onclick="oracleData.sweetness='high'; setOracleStep(5)"><h3>Muy Dulce</h3><p>Caramelo / Miel</p></div>
+                    <div class="option-box" onclick="oracleData.sweetness='mid'; setOracleStep(5)"><h3>Balanceado</h3><p>Agridulce armónico</p></div>
+                    <div class="option-box" onclick="oracleData.sweetness='low'; setOracleStep(5)"><h3>Tostado Clásico</h3><p>Cacao puro / Amargor noble</p></div>
                 </div>
+            </div>
+
+            <div class="oracle-step" id="o-step-5">
+                <h3 style="font-size: 24px;">Paso 5: Notas de Sabor Deseadas</h3>
+                <div class="option-grid">
+                    <div class="option-box" onclick="oracleData.flavor='choc'; finishOracleManual()"><i class="fa-solid fa-cookie"></i><h3>Chocolate & Nueces</h3></div>
+                    <div class="option-box" onclick="oracleData.flavor='fruit'; finishOracleManual()"><i class="fa-solid fa-lemon"></i><h3>Frutos & Flores</h3></div>
+                    <div class="option-box" onclick="oracleData.flavor='funky'; finishOracleManual()"><i class="fa-solid fa-flask"></i><h3>Exótico & Fermentado</h3></div>
+                </div>
+            </div>
+
+            <!-- Resultados Manuales -->
+            <div id="manual-oracle-results" style="display: none; margin-top: 40px;">
+                <h3 style="font-family: var(--font-head); font-size: 24px; margin-bottom: 20px;">Tus Matches Perfectos (Calculados Algorítmicamente):</h3>
+                <div class="grid" id="manual-oracle-products" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+                    <!-- Recommended products appear here -->
+                </div>
+                <button class="btn btn-outline" onclick="setOracleStep(1)" style="color:#fff; border-color:#fff; margin-top: 20px;">Volver a Intentar</button>
             </div>
         </div>
 
@@ -732,7 +752,7 @@
                 <img src="${h.img}">
                 <div>
                     <span style="font-family:var(--font-mono); font-size:10px; color:var(--accent); text-transform:uppercase; font-weight:700;">${h.badge}</span>
-                    <h4 style="margin-top:2px;">${h.name}</h4>
+                    <h4 style="margin-top:2px; color:var(--dark);">${h.name}</h4>
                     <span style="font-size:12px; color:#888;">${formatCLP(h.basePrice)}</span>
                 </div>
             </div>
@@ -961,7 +981,7 @@
         }
     }
 
-    // --- ORACLE LOGIC (IA GEMINI & MANUAL) ---
+    // --- ORACLE LOGIC (IA GEMINI & MANUAL EXTENDIDO) ---
     function setOracleMode(mode) {
         if(mode === 'manual') {
             document.getElementById('oracle-manual-flow').style.display = 'block';
@@ -972,19 +992,69 @@
         }
     }
 
-    // Flujo Manual
-    let oracleData = { method: '', acidity: '', flavor: '' };
+    // Flujo Manual Extendido
+    let oracleData = { method: '', acidity: '', body: '', sweetness: '', flavor: '' };
     function setOracleStep(step) {
+        document.getElementById('manual-oracle-results').style.display = 'none';
         document.querySelectorAll('.oracle-step').forEach(s => s.classList.remove('active'));
         document.getElementById(`o-step-${step}`).classList.add('active');
     }
-    function finishOracle() {
-        let matchId = 6; 
-        if(oracleData.method === 'filter' && oracleData.flavor === 'fruit') matchId = 2; 
-        if(oracleData.flavor === 'funky') matchId = 8; 
-        if(oracleData.method === 'espresso' && oracleData.acidity === 'low') matchId = 5; 
-        if(oracleData.acidity === 'high' && oracleData.flavor === 'fruit') matchId = 12; 
-        viewProduct(matchId);
+
+    function finishOracleManual() {
+        document.querySelectorAll('.oracle-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('manual-oracle-results').style.display = 'block';
+
+        const coffeeCatalog = catalog.filter(c => ['origin', 'blend', 'premium'].includes(c.cat));
+        
+        // Algoritmo de Match basado en puntajes de radar y metadatos
+        coffeeCatalog.forEach(c => {
+            let score = 0;
+            // radar index: [Dulzor(0), Acidez(1), Cuerpo(2), Floral(3), Postgusto(4)]
+            
+            // Acidez
+            if(oracleData.acidity === 'low') score += (10 - c.radar[1]);
+            else if(oracleData.acidity === 'mid') score += (10 - Math.abs(5 - c.radar[1]));
+            else score += c.radar[1];
+            
+            // Cuerpo
+            if(oracleData.body === 'light') score += (10 - c.radar[2]);
+            else if(oracleData.body === 'mid') score += (10 - Math.abs(5 - c.radar[2]));
+            else score += c.radar[2];
+            
+            // Dulzor vs Amargor
+            if(oracleData.sweetness === 'high') score += c.radar[0];
+            else if(oracleData.sweetness === 'mid') score += (10 - Math.abs(5 - c.radar[0]));
+            else score += (10 - c.radar[0]); // Si no busca dulzor, premiamos los menos dulces
+            
+            // Sabor
+            const fStr = c.flavors.join(' ').toLowerCase();
+            const proc = c.trace?.proceso.toLowerCase() || '';
+            if(oracleData.flavor === 'choc' && (fStr.includes('cacao') || fStr.includes('choc') || fStr.includes('nuez') || fStr.includes('caramelo'))) score += 6;
+            if(oracleData.flavor === 'fruit' && (fStr.includes('frut') || fStr.includes('limón') || fStr.includes('durazno') || fStr.includes('jazmín') || fStr.includes('floral'))) score += 6;
+            if(oracleData.flavor === 'funky' && (fStr.includes('ron') || fStr.includes('licor') || proc.includes('anaer') || proc.includes('macer') || proc.includes('shock'))) score += 6;
+            
+            // Metodo 
+            if(oracleData.method === 'espresso' && (c.trace?.tueste.includes('Medio-Oscuro') || c.trace?.tueste.includes('Oscuro'))) score += 3;
+            if(oracleData.method === 'filter' && (c.trace?.tueste.includes('Claro') || c.trace?.tueste.includes('Medio-Claro'))) score += 3;
+
+            c.oracleScore = score;
+        });
+
+        // Ordenar y tomar los 3 mejores
+        coffeeCatalog.sort((a, b) => b.oracleScore - a.oracleScore);
+        const topMatches = coffeeCatalog.slice(0, 3);
+
+        const productsGrid = document.getElementById('manual-oracle-products');
+        productsGrid.innerHTML = topMatches.map(p => `
+            <div class="card" onclick="viewProduct(${p.id})" style="background:var(--surface); border:1px solid rgba(0,0,0,0.1);">
+                <div class="card-img" style="padding: 15px; background:var(--bg);"><img src="${p.img}" style="filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));"></div>
+                <div class="card-body" style="padding: 15px;">
+                    <div class="card-meta" style="background:var(--dark); color:var(--accent);">${p.badge}</div>
+                    <h4 style="font-family:var(--font-head); font-size:16px; color:var(--dark); margin-top:5px;">${p.name}</h4>
+                    <span style="font-weight:800; font-size:14px; margin-top:10px; display:block; color:var(--dark);">${formatCLP(p.basePrice)}</span>
+                </div>
+            </div>
+        `).join('');
     }
 
     // Flujo AI Gemini
@@ -1350,9 +1420,10 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
                 // Reiniciar todo en el Oráculo al entrar
                 setOracleMode('manual');
                 setOracleStep(1);
-                oracleData = { method: '', acidity: '', flavor: '' };
+                oracleData = { method: '', acidity: '', body: '', sweetness: '', flavor: '' };
                 document.getElementById('ai-oracle-input').value = '';
                 document.getElementById('ai-oracle-results').style.display = 'none';
+                document.getElementById('manual-oracle-results').style.display = 'none';
             }
         }
         window.scrollTo({ top: 0, behavior: 'instant' });
