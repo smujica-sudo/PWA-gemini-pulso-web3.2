@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         /* --- VARIABLES SENSORIALES --- */
@@ -1063,8 +1064,9 @@
         for (let i = 0; i < maxRetries; i++) {
             try {
                 const response = await fetch(url, options);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return await response.json();
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error?.message || `HTTP error! status: ${response.status}`);
+                return data;
             } catch (error) {
                 if (i === maxRetries - 1) throw error;
                 await new Promise(resolve => setTimeout(resolve, delays[i]));
@@ -1099,7 +1101,7 @@ Debes responder con un tono técnico, apasionado y directo (estilo brutalista, p
 Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionado.`;
 
         const payload = {
-            contents: [{ parts: [{ text: input }] }],
+            contents: [{ role: "user", parts: [{ text: input }] }],
             systemInstruction: { parts: [{ text: systemPrompt }] },
             generationConfig: {
                 responseMimeType: "application/json",
@@ -1107,8 +1109,9 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
                     type: "OBJECT",
                     properties: {
                         mensaje: { type: "STRING", description: "Tu explicación y recomendación técnica dirigida al usuario." },
-                        recomendados: { type: "ARRAY", items: { type: "NUMBER" }, description: "Lista con 1 o 2 IDs numéricos de los productos recomendados." }
-                    }
+                        recomendados: { type: "ARRAY", items: { type: "INTEGER" }, description: "Lista con 1 o 2 IDs numéricos de los productos recomendados." }
+                    },
+                    required: ["mensaje", "recomendados"]
                 }
             }
         };
@@ -1120,9 +1123,16 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
                 body: JSON.stringify(payload)
             });
 
-            if (data.candidates && data.candidates[0].content.parts[0].text) {
-                const result = JSON.parse(data.candidates[0].content.parts[0].text);
-                renderOracleResults(result.mensaje, result.recomendados);
+            if (data.candidates && data.candidates.length > 0) {
+                const candidate = data.candidates[0];
+                if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+                    let responseText = candidate.content.parts[0].text;
+                    responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+                    const result = JSON.parse(responseText);
+                    renderOracleResults(result.mensaje, result.recomendados);
+                } else {
+                    throw new Error("Contenido bloqueado o no generado");
+                }
             } else {
                 throw new Error("Respuesta inválida de Gemini");
             }
@@ -1303,7 +1313,10 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
                         <div style="width:100%; height:4px; background:rgba(255,255,255,0.2); margin-bottom: 20px;">
                             <div id="b-progress-bar" style="height:100%; width:0%; background:var(--accent); transition:1s linear;"></div>
                         </div>
-                        <button class="btn btn-neon" id="b-btn" onclick="toggleBrewTimer()" style="width:100%;"><i class="fa-solid fa-play"></i> Iniciar Cronómetro</button>
+                        <div style="display:flex; gap:15px;">
+                            <button class="btn btn-neon" id="b-btn" onclick="toggleBrewTimer()" style="flex:1;"><i class="fa-solid fa-play"></i> Iniciar Cronómetro</button>
+                            <button class="btn btn-outline" onclick="downloadBrewGuidePDF()" style="color:#fff; border-color:#fff;" title="Descargar Receta en PDF"><i class="fa-solid fa-file-pdf"></i></button>
+                        </div>
                     </div>
                 </div>
                 
@@ -1318,6 +1331,71 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
                 </div>
             </div>
         `;
+    }
+
+    function downloadBrewGuidePDF() {
+        const methodData = brewMethodsData.find(m => m.id === activeBrewMethodId);
+        const dose = document.getElementById('calc-dose').value;
+        const ratio = document.getElementById('calc-ratio').value;
+        const water = document.getElementById('calc-water').value;
+
+        // Generamos un layout limpio, con fondo blanco, ideal para imprimir o leer en PDF
+        const content = `
+            <div style="padding: 50px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #111; background: #fff; line-height: 1.6;">
+                <div style="text-align: center; margin-bottom: 50px;">
+                    <h1 style="font-size: 48px; font-weight: 800; margin: 0; letter-spacing: -2px;">PULSO.</h1>
+                    <p style="font-size: 12px; color: #666; letter-spacing: 2px; text-transform: uppercase;">Brew Lab Pro - Extracting Excellence</p>
+                </div>
+                
+                <h2 style="font-size: 28px; border-bottom: 3px solid #39FF14; padding-bottom: 10px; margin-bottom: 25px; text-transform: uppercase;">${methodData.name}</h2>
+                
+                <div style="display: flex; justify-content: space-between; background: #f8f7f2; padding: 25px; border-radius: 8px; margin-bottom: 40px; font-size: 14px;">
+                    <div>
+                        <p style="margin: 0 0 10px 0;"><strong>Dosis de Café (IN):</strong> ${dose}g</p>
+                        <p style="margin: 0 0 10px 0;"><strong>Agua Total (OUT):</strong> ${water}g</p>
+                        <p style="margin: 0;"><strong>Ratio Deseado:</strong> 1:${ratio}</p>
+                    </div>
+                    <div>
+                        <p style="margin: 0 0 10px 0;"><strong>Molienda Sugerida:</strong> ${methodData.grind}</p>
+                        <p style="margin: 0 0 10px 0;"><strong>Temperatura:</strong> ${methodData.temp}</p>
+                        <p style="margin: 0;"><strong>Perfil Recomendado:</strong> ${methodData.rec}</p>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 18px; margin-bottom: 20px; text-transform: uppercase; color: #333;">Protocolo de Extracción</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    ${currentBrewSteps.map(s => `
+                        <div style="padding: 15px; background: #fff; border: 1px solid #eee; border-left: 4px solid #39FF14; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="display: inline-block; width: 60px; font-family: monospace; color: #555;">${s.time}s</strong>
+                                <span style="font-size: 15px;">${s.text}</span>
+                            </div>
+                            <strong style="font-family: monospace; font-size: 16px;">${s.target}</strong>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="margin-top: 60px; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #eee; padding-top: 20px;">
+                    <p>Documento generado algorítmicamente por PULSO Brew Lab Pro.</p>
+                </div>
+            </div>
+        `;
+
+        const element = document.createElement('div');
+        element.innerHTML = content;
+
+        showToast("Generando documento PDF...");
+
+        html2pdf().set({
+            margin: 0,
+            filename: `PULSO_BrewGuide_${methodData.name.replace(/\s+/g, '_')}.pdf`,
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).from(element).save().then(() => {
+            showToast("Receta descargada exitosamente.");
+        });
     }
 
     function toggleBrewTimer() {
