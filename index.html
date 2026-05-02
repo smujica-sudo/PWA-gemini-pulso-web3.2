@@ -49,13 +49,14 @@
         .logo-container { text-decoration: none; color: var(--dark); display: flex; align-items: center; }
         .logo-full { font-family: var(--font-head); font-size: 32px; font-weight: 800; letter-spacing: -2px; transition: 0.3s;}
         .logo-full:hover { color: var(--accent); text-shadow: 2px 2px 0 var(--dark); }
-        .logo-iso { font-family: var(--font-head); font-size: 32px; font-weight: 800; display: none; color: var(--dark); -webkit-text-stroke: 1px var(--accent); }
+        
+        .logo-iso { font-family: var(--font-head); font-size: 28px; font-weight: 800; display: none; color: var(--dark); }
         nav.scrolled .logo-full { display: none; }
-        nav.scrolled .logo-iso { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--accent); color: var(--dark); border-radius: 50%; -webkit-text-stroke: 0px; animation: ripple 1.5s infinite; }
+        nav.scrolled .logo-iso { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--accent); color: var(--dark); border-radius: 50%; animation: ripple 1.5s infinite; }
         
         @keyframes ripple {
             0% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.5); }
-            100% { box-shadow: 0 0 0 20px rgba(57, 255, 20, 0); }
+            100% { box-shadow: 0 0 0 15px rgba(57, 255, 20, 0); }
         }
         
         .nav-links { display: flex; gap: 30px; }
@@ -65,6 +66,20 @@
         .nav-icons { display: flex; gap: 20px; font-size: 18px; cursor: pointer; align-items: center; }
         .cart-icon-wrapper { position: relative; }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--accent); color: var(--dark); font-family: var(--font-mono); font-size: 10px; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--dark); border-radius: 50%; transition: 0.2s; }
+
+        /* --- BUSCADOR PREDICTIVO --- */
+        .search-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(248, 247, 242, 0.98); z-index: 3000; display: flex; flex-direction: column; padding: 60px 40px; opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); }
+        .search-overlay.active { opacity: 1; pointer-events: auto; }
+        .search-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--dark); padding-bottom: 20px; margin-bottom: 40px; }
+        .search-input { width: 100%; font-family: var(--font-head); font-size: 5vw; border: none; outline: none; background: transparent; color: var(--dark); text-transform: uppercase; font-weight: 800; }
+        .search-input::placeholder { color: rgba(0,0,0,0.2); }
+        .search-close { font-size: 40px; cursor: pointer; transition: 0.3s; }
+        .search-close:hover { color: var(--accent); transform: rotate(90deg); }
+        .search-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; overflow-y: auto; padding-bottom: 100px; }
+        .search-item { display: flex; gap: 20px; align-items: center; cursor: pointer; padding: 15px; border: 1px solid transparent; transition: 0.3s; background: #fff; }
+        .search-item:hover { border-color: var(--dark); box-shadow: 6px 6px 0px var(--accent); transform: translate(-3px, -3px); }
+        .search-item img { width: 80px; height: 80px; object-fit: contain; background: var(--bg); padding: 5px; border: 1px solid rgba(0,0,0,0.1); }
+        .search-item h4 { font-family: var(--font-head); font-size: 18px; margin-bottom: 5px; }
 
         /* --- MARQUESINA --- */
         .marquee { background: var(--dark); color: var(--accent); padding: 12px 0; overflow: hidden; font-family: var(--font-mono); font-size: 12px; width: 100%; text-transform: uppercase; display: flex; border-bottom: 2px solid var(--dark); }
@@ -168,9 +183,15 @@
         .grind-opt.active { background: var(--dark); color: #fff; border-color: var(--dark); box-shadow: 3px 3px 0px var(--accent); transform: translate(-2px,-2px); }
         .grind-opt.active i, .grind-opt.active small { color: var(--accent); }
 
-        /* --- VISTA: NOSOTROS (Mejorada) --- */
+        /* --- VISTA: NOSOTROS (Misión, Visión, Valores) --- */
         .about-hero { text-align: center; padding: 80px 0 40px; }
         .about-hero h1 { font-family: var(--font-head); font-size: clamp(3rem, 6vw, 6rem); text-transform: uppercase; line-height: 0.9; margin-bottom: 20px; }
+        
+        .values-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin: 40px 0 80px; }
+        .value-card { background: var(--dark); color: #fff; padding: 40px; border: 1px solid var(--accent); box-shadow: 8px 8px 0 var(--accent); }
+        .value-card h4 { font-family: var(--font-head); font-size: 24px; text-transform: uppercase; margin-bottom: 15px; color: var(--accent); }
+        .value-card p { font-size: 14px; line-height: 1.6; font-family: var(--font-mono); }
+
         .process-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 60px 0 100px; }
         .process-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 2px solid var(--dark); filter: grayscale(1); transition: 0.5s; }
         .process-img:hover { filter: grayscale(0); box-shadow: 10px 10px 0px var(--accent); transform: translate(-5px, -5px); }
@@ -187,9 +208,11 @@
         .calculator-box { background: var(--surface); border: 2px solid var(--dark); padding: 30px; margin-bottom: 30px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; align-items: end;}
         .calc-field label { display: block; font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; margin-bottom: 10px; font-weight: 700; color: var(--dark);}
         .calc-field input, .calc-field select { width: 100%; padding: 12px; font-family: var(--font-head); font-size: 18px; border: 1px solid var(--border); background: var(--bg); outline: none; }
-        .calc-result { background: var(--dark); color: var(--accent); padding: 15px; text-align: center; border: 1px solid var(--dark); }
-        .calc-result span { font-family: var(--font-mono); font-size: 10px; display: block; color: #fff;}
-        .calc-result strong { font-family: var(--font-head); font-size: 28px; }
+        
+        .brew-meta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .meta-box { background: rgba(0,0,0,0.2); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .meta-box span { font-family: var(--font-mono); font-size: 10px; display: block; color: var(--accent); text-transform: uppercase; margin-bottom: 5px;}
+        .meta-box strong { font-family: var(--font-head); font-size: 16px; }
 
         .guide-display { background: var(--dark); color: #fff; padding: 50px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; border: 1px solid var(--dark); }
         .timer-val { font-family: var(--font-head); font-size: 90px; color: var(--accent); line-height: 1; margin: 20px 0; }
@@ -200,8 +223,15 @@
         .s-time { font-family: var(--font-mono); font-size: 14px; }
         .s-target { font-family: var(--font-mono); font-size: 16px; font-weight: 700; text-align: right; }
 
-        /* --- THE ORACLE (Gemini AI) --- */
+        /* --- THE ORACLE (Gemini AI & Manual) --- */
         .oracle-container { background: var(--dark); color: #fff; padding: 80px; margin-bottom: 100px; box-shadow: 15px 15px 0px var(--accent); border: 1px solid var(--border); }
+        .oracle-step { display: none; }
+        .oracle-step.active { display: block; animation: fadeIn 0.4s ease forwards; }
+        .option-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 40px 0; }
+        .option-box { border: 1px solid rgba(255,255,255,0.2); padding: 30px 20px; cursor: pointer; transition: 0.2s; text-align: center; background: rgba(255,255,255,0.02); }
+        .option-box:hover { background: var(--accent); color: var(--dark); border-color: var(--accent); transform: translateY(-5px); }
+        .option-box i { font-size: 32px; margin-bottom: 15px; }
+
         .ai-chat-box { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
         .ai-chat-box textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 20px; font-family: var(--font-main); font-size: 16px; resize: vertical; min-height: 120px; outline: none; transition: 0.3s; }
         .ai-chat-box textarea:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(57,255,20,0.2); }
@@ -235,9 +265,10 @@
 
         @media (max-width: 900px) {
             .hero-text h1 { font-size: 3rem; }
-            .tech-modules, .process-grid, .detail-split, .brew-layout, .guide-display, .manifesto-section { grid-template-columns: 1fr; }
+            .tech-modules, .process-grid, .detail-split, .brew-layout, .guide-display, .manifesto-section, .values-grid { grid-template-columns: 1fr; }
             .nav-links { display: none; }
-            .calculator-box { grid-template-columns: 1fr; gap: 10px;}
+            .calculator-box, .brew-meta-grid { grid-template-columns: 1fr; gap: 10px;}
+            .search-input { font-size: 28px; }
         }
     </style>
 </head>
@@ -251,11 +282,12 @@
         </a>
         <div class="nav-links">
             <a href="#/shop" class="nav-link" data-target="shop">Catálogo</a>
-            <a href="#/oracle" class="nav-link" data-target="oracle">AI Oracle</a>
-            <a href="#/lab" class="nav-link" data-target="lab">Brew Lab</a>
+            <a href="#/oracle" class="nav-link" data-target="oracle">Sensory Oracle</a>
+            <a href="#/lab" class="nav-link" data-target="lab">Brew Lab Pro</a>
             <a href="#/about" class="nav-link" data-target="about">Nosotros</a>
         </div>
         <div class="nav-icons">
+            <i class="fa-solid fa-magnifying-glass" onclick="toggleSearch()" style="margin-right: 5px;"></i>
             <div class="cart-icon-wrapper" onclick="toggleCart()">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <div class="cart-badge" id="cart-counter">0</div>
@@ -266,6 +298,17 @@
 
 <!-- TOAST CONTAINER -->
 <div id="toast-container"></div>
+
+<!-- BUSCADOR PREDICTIVO OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+    <div class="search-header">
+        <input type="text" class="search-input" id="searchInput" placeholder="Escribe para buscar un café, método..." onkeyup="handleSearch()">
+        <i class="fa-solid fa-xmark search-close" onclick="toggleSearch()"></i>
+    </div>
+    <div class="search-results" id="searchResults">
+        <!-- Resultados predictivos inyectados por JS -->
+    </div>
+</div>
 
 <!-- CARRITO DRAWER -->
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
@@ -345,6 +388,7 @@
                 <span class="m-tag">86+ SCA Score</span>
                 <span class="m-tag">Roast Science</span>
             </div>
+            <a href="#/about" class="btn btn-outline" style="margin-top: 20px;">Leer Manifiesto</a>
         </div>
     </section>
 
@@ -393,36 +437,80 @@
     <div id="product-target"></div>
 </main>
 
-<!-- THE ORACLE (GEMINI AI INTEGRATION) -->
+<!-- THE ORACLE -->
 <main id="oracle" class="view container">
     <div class="oracle-container reveal">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 40px;">
             <div>
-                <h2 style="font-family: var(--font-head); font-size: 48px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase;">AI Sensory Oracle</h2>
-                <p style="font-size: 18px; margin-bottom: 20px; color: #aaa;">Describe tu café ideal. Nuestra inteligencia artificial buscará tu match en el archivo.</p>
+                <h2 style="font-family: var(--font-head); font-size: 48px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase;">Sensory Oracle</h2>
+                <p style="font-size: 18px; color: #aaa;">Encontraremos tu match perfecto mediante calibración de datos técnicos o Inteligencia Artificial.</p>
             </div>
-            <div>
-                <i class="fa-solid fa-microchip" style="font-size: 40px; color: var(--accent);"></i>
+            <div style="display:flex; gap: 15px;">
+                <button class="btn btn-outline" style="color: #fff; border-color: #fff;" onclick="setOracleMode('manual')">Asistente Manual</button>
+                <button class="btn btn-neon" onclick="setOracleMode('ai')"><i class="fa-solid fa-microchip"></i> IA Gemini</button>
             </div>
         </div>
 
-        <div class="ai-chat-box">
-            <textarea id="ai-oracle-input" placeholder="Ej: Busco un café frutal y brillante para preparar en V60 por la mañana. No quiero nada oscuro ni ahumado..."></textarea>
-            <button class="btn btn-neon" onclick="consultOracle()" id="btn-oracle-submit"><i class="fa-solid fa-wand-magic-sparkles"></i> Analizar Catálogo</button>
-        </div>
-
-        <div id="ai-oracle-loader" style="display: none; margin-top: 40px; text-align: center; color: var(--accent);">
-            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 40px;"></i>
-            <p style="margin-top: 15px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;">CALIBRANDO RED NEURONAL SENSORIAL...</p>
-        </div>
-
-        <div id="ai-oracle-results" style="margin-top: 40px; display: none;">
-            <div id="ai-oracle-message" style="font-size: 16px; line-height: 1.6; padding: 25px; background: rgba(57,255,20,0.05); border-left: 4px solid var(--accent); margin-bottom: 30px;">
-                <!-- AI Message appears here -->
+        <!-- FLUJO MANUAL -->
+        <div id="oracle-manual-flow">
+            <div class="oracle-step active" id="o-step-1">
+                <h3 style="font-size: 24px;">Paso 1: ¿Conoces tu perfil sensorial?</h3>
+                <div class="option-grid">
+                    <div class="option-box" onclick="setOracleStep(2)"><i class="fa-solid fa-brain"></i><h3>Sí, me gusta explorar</h3><p style="font-size:12px; color:#aaa;">Calibrar mi paladar</p></div>
+                    <div class="option-box" onclick="viewProduct(42)"><i class="fa-solid fa-box-open"></i><h3>No estoy seguro</h3><p style="font-size:12px; color:#aaa;">Recomiéndame un Tasting Flight</p></div>
+                </div>
             </div>
-            <h3 style="font-family: var(--font-head); font-size: 24px; margin-bottom: 20px;">Matches Encontrados:</h3>
-            <div class="grid" id="ai-oracle-products" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
-                <!-- Recommended products appear here -->
+
+            <div class="oracle-step" id="o-step-2">
+                <h3 style="font-size: 24px;">Paso 2: ¿Qué nivel de acidez prefieres?</h3>
+                <div class="option-grid">
+                    <div class="option-box" onclick="oracleData.acidity='low'; setOracleStep(3)"><h3>Baja</h3><p style="font-size:12px; color:#aaa;">Sabores redondos y pesados.</p></div>
+                    <div class="option-box" onclick="oracleData.acidity='mid'; setOracleStep(3)"><h3>Media</h3><p style="font-size:12px; color:#aaa;">Equilibrio jugoso.</p></div>
+                    <div class="option-box" onclick="oracleData.acidity='high'; setOracleStep(3)"><h3>Alta / Brillante</h3><p style="font-size:12px; color:#aaa;">Eléctrica y frutal.</p></div>
+                </div>
+            </div>
+
+            <div class="oracle-step" id="o-step-3">
+                <h3 style="font-size: 24px;">Paso 3: Notas de Sabor Deseadas</h3>
+                <div class="option-grid">
+                    <div class="option-box" onclick="oracleData.flavor='choc'; setOracleStep(4)"><i class="fa-solid fa-cookie"></i><h3>Chocolate & Nueces</h3></div>
+                    <div class="option-box" onclick="oracleData.flavor='fruit'; setOracleStep(4)"><i class="fa-solid fa-lemon"></i><h3>Frutos Rojos & Flores</h3></div>
+                    <div class="option-box" onclick="oracleData.flavor='funky'; setOracleStep(4)"><i class="fa-solid fa-flask"></i><h3>Exótico & Fermentado</h3></div>
+                </div>
+            </div>
+
+            <div class="oracle-step" id="o-step-4">
+                <h3 style="font-size: 24px;">Paso 4: Método de Preparación Principal</h3>
+                <div class="option-grid">
+                    <div class="option-box" onclick="oracleData.method='espresso'; finishOracle()"><i class="fa-solid fa-fire"></i><h3>Espresso / Moka</h3></div>
+                    <div class="option-box" onclick="oracleData.method='filter'; finishOracle()"><i class="fa-solid fa-filter"></i><h3>Filtro / V60</h3></div>
+                    <div class="option-box" onclick="oracleData.method='immersion'; finishOracle()"><i class="fa-solid fa-compress"></i><h3>Prensa Francesa</h3></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FLUJO INTELIGENCIA ARTIFICIAL (GEMINI) -->
+        <div id="oracle-ai-flow" style="display: none;">
+            <div class="ai-chat-box">
+                <h3 style="font-size: 24px; margin-bottom: 10px;">Consulta a Gemini 2.5 Flash</h3>
+                <textarea id="ai-oracle-input" placeholder="Ej: Busco un café frutal y brillante para preparar en V60 por la mañana. No quiero nada oscuro ni ahumado..."></textarea>
+                <button class="btn btn-neon" onclick="consultOracle()" id="btn-oracle-submit"><i class="fa-solid fa-wand-magic-sparkles"></i> Analizar Catálogo</button>
+            </div>
+
+            <div id="ai-oracle-loader" style="display: none; margin-top: 40px; text-align: center; color: var(--accent);">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 40px;"></i>
+                <p style="margin-top: 15px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;">CALIBRANDO RED NEURONAL SENSORIAL...</p>
+            </div>
+
+            <div id="ai-oracle-results" style="margin-top: 40px; display: none;">
+                <div id="ai-oracle-message" style="font-size: 16px; line-height: 1.6; padding: 25px; background: rgba(57,255,20,0.05); border-left: 4px solid var(--accent); margin-bottom: 30px;">
+                    <!-- AI Message appears here -->
+                </div>
+                <h3 style="font-family: var(--font-head); font-size: 24px; margin-bottom: 20px;">Matches Encontrados:</h3>
+                <div class="grid" id="ai-oracle-products" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+                    <!-- Recommended products appear here -->
+                </div>
             </div>
         </div>
     </div>
@@ -431,7 +519,7 @@
 <!-- BREW LAB INTELIGENTE -->
 <main id="lab" class="view container">
     <h1 style="font-family: var(--font-head); font-size: 64px; text-transform: uppercase; margin-bottom: 10px;">Brew Lab Pro</h1>
-    <p style="font-size: 16px; color: #555; margin-bottom: 40px; font-family: var(--font-mono);">Calculadora algorítmica bidireccional.</p>
+    <p style="font-size: 16px; color: #555; margin-bottom: 40px; font-family: var(--font-mono);">Calculadora algorítmica bidireccional y recetas de campeonato.</p>
     
     <div class="calculator-box reveal">
         <div class="calc-field">
@@ -465,11 +553,26 @@
         <p style="font-size: 20px; font-weight: 700; max-width: 800px; margin: 0 auto;">PULSO es la intersección entre biotecnología agrícola y perfiles termodinámicos de tueste.</p>
     </div>
 
+    <div class="values-grid reveal">
+        <div class="value-card">
+            <h4><i class="fa-solid fa-eye"></i> Visión</h4>
+            <p>Liderar la tercera ola del café en Sudamérica, desmitificando el rubro y demostrando que la excelencia sensorial nace de la ciencia, los datos y la transparencia radical en la cadena de suministro.</p>
+        </div>
+        <div class="value-card">
+            <h4><i class="fa-solid fa-bullseye"></i> Misión</h4>
+            <p>Erradicar el café aburrido y sobretostado empoderando al consumidor con educación técnica, y empoderando al productor pagándole precios que le permitan innovar en procesos botánicos.</p>
+        </div>
+        <div class="value-card">
+            <h4><i class="fa-solid fa-gem"></i> Valores</h4>
+            <p>Comercio Justo Real (Direct Trade), Innovación Termodinámica (Roast Profiling), Sostenibilidad (Tostamos con cero emisiones), y Obsesión por la Calidad (86+ SCA Score Mínimo).</p>
+        </div>
+    </div>
+
     <div class="process-grid">
         <div class="process-text reveal">
             <div class="process-num">01</div>
             <h3>Sourcing de Precisión</h3>
-            <p style="line-height: 1.8; color: #555;">Colaboramos con agrónomos y productores experimentales. Seleccionamos varietales únicos (Geisha, Papayo, Ombligón, Sidra) procesados mediante shock térmico, fermentaciones lácticas y maceración carbónica. El comercio justo es nuestra base: pagamos el precio que permite sostener esta innovación.</p>
+            <p style="line-height: 1.8; color: #555;">Colaboramos con agrónomos y productores experimentales. Seleccionamos varietales únicos (Geisha, Papayo, Ombligón, Sidra) procesados mediante shock térmico, fermentaciones lácticas y maceración carbónica. Saltamos a los importadores ciegos para forjar relaciones <i>Direct Trade</i>.</p>
         </div>
         <img src="https://images.unsplash.com/photo-1524350876685-274059332603?auto=format&fit=crop&q=80&w=800" class="process-img reveal">
 
@@ -477,13 +580,13 @@
         <div class="process-text reveal" style="grid-row: 2;">
             <div class="process-num">02</div>
             <h3>Roast Profiling</h3>
-            <p style="line-height: 1.8; color: #555;">No tostamos por color, tostamos por software. Analizamos la Tasa de Aumento (RoR) mediante sensores PT100 y controlamos el desarrollo térmico para maximizar la dulzura enzimática de cada lote, respetando el terroir y la estructura celular del grano.</p>
+            <p style="line-height: 1.8; color: #555;">No tostamos por color, tostamos por software. Analizamos la Tasa de Aumento (RoR) mediante sensores PT100 y controlamos el desarrollo térmico para maximizar la dulzura enzimática de cada lote, respetando el terroir y la estructura celular del grano. Todo en un tostador de lecho fluido con cero huella de carbono.</p>
         </div>
 
         <div class="process-text reveal">
             <div class="process-num">03</div>
             <h3>QA & Transparencia</h3>
-            <p style="line-height: 1.8; color: #555;">Cada bache se cata a ciegas bajo protocolos SCA (Specialty Coffee Association). Si no puntúa 86+, no llega a nuestra bolsa. Publicamos nuestras curvas de tueste y te entregamos calculadoras de extracción algorítmicas para asegurar la taza perfecta.</p>
+            <p style="line-height: 1.8; color: #555;">Cada bache se cata a ciegas bajo estrictos protocolos de la Specialty Coffee Association. Publicamos nuestras curvas de tueste y te entregamos calculadoras de extracción algorítmicas (Brew Lab) para asegurar la taza perfecta.</p>
         </div>
         <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=800" class="process-img reveal">
     </div>
@@ -509,7 +612,7 @@
             </div>
             <div class="footer-col">
                 <h4 style="color: var(--accent); font-family: var(--font-mono); font-size: 12px; margin-bottom: 20px; text-transform: uppercase;">Nosotros</h4>
-                <a href="#/about">Historia</a>
+                <a href="#/about">Historia y Misión</a>
                 <a href="#">Contacto B2B</a>
             </div>
         </div>
@@ -607,6 +710,35 @@
         { id: 50, cat: 'subs', badge: 'B2B', name: 'Suscripción Office Studio', basePrice: 55000, img: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=600', desc: '2 Kg/mes. Mantén a tu equipo inspirado con café de especialidad.', flavors: ['Balanceado'], radar: [8,5,8,4,8], trace: { origen: 'Brasil/Colombia', productor: 'Pulso', altitud: 'Blend', varietal: 'Blend', proceso: 'Mixto', tueste: 'Medio' } }
     ];
 
+    // --- LOGICA DE BUSCADOR PREDICTIVO ---
+    function toggleSearch() { 
+        const overlay = document.getElementById('searchOverlay');
+        overlay.classList.toggle('active'); 
+        if(overlay.classList.contains('active')) {
+            document.getElementById('searchInput').focus();
+        } else {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    }
+
+    function handleSearch() {
+        const val = document.getElementById('searchInput').value.toLowerCase();
+        const res = document.getElementById('searchResults');
+        if(val.length < 2) { res.innerHTML = ''; return; }
+        const hits = catalog.filter(c => c.name.toLowerCase().includes(val) || (c.trace && c.trace.origen.toLowerCase().includes(val)) || c.cat.toLowerCase().includes(val));
+        res.innerHTML = hits.map(h => `
+            <div class="search-item" onclick="toggleSearch(); viewProduct(${h.id})">
+                <img src="${h.img}">
+                <div>
+                    <span style="font-family:var(--font-mono); font-size:10px; color:var(--accent); text-transform:uppercase; font-weight:700;">${h.badge}</span>
+                    <h4 style="margin-top:2px;">${h.name}</h4>
+                    <span style="font-size:12px; color:#888;">${formatCLP(h.basePrice)}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
     // --- LOGICA DE CARRITO ---
     let cart = [];
 
@@ -678,7 +810,7 @@
         `).join('');
     }
 
-    // --- SHOP LOGIC (Filtros Reparados) ---
+    // --- SHOP LOGIC ---
     function filterShop(cat) {
         document.querySelectorAll('#shop-filters .tab-btn').forEach(b => {
             b.classList.remove('active');
@@ -829,9 +961,33 @@
         }
     }
 
-    // --- ORACLE LOGIC CON IA GEMINI ---
-    
-    // Función auxiliar con Exponential Backoff para llamadas de red seguras
+    // --- ORACLE LOGIC (IA GEMINI & MANUAL) ---
+    function setOracleMode(mode) {
+        if(mode === 'manual') {
+            document.getElementById('oracle-manual-flow').style.display = 'block';
+            document.getElementById('oracle-ai-flow').style.display = 'none';
+        } else {
+            document.getElementById('oracle-manual-flow').style.display = 'none';
+            document.getElementById('oracle-ai-flow').style.display = 'block';
+        }
+    }
+
+    // Flujo Manual
+    let oracleData = { method: '', acidity: '', flavor: '' };
+    function setOracleStep(step) {
+        document.querySelectorAll('.oracle-step').forEach(s => s.classList.remove('active'));
+        document.getElementById(`o-step-${step}`).classList.add('active');
+    }
+    function finishOracle() {
+        let matchId = 6; 
+        if(oracleData.method === 'filter' && oracleData.flavor === 'fruit') matchId = 2; 
+        if(oracleData.flavor === 'funky') matchId = 8; 
+        if(oracleData.method === 'espresso' && oracleData.acidity === 'low') matchId = 5; 
+        if(oracleData.acidity === 'high' && oracleData.flavor === 'fruit') matchId = 12; 
+        viewProduct(matchId);
+    }
+
+    // Flujo AI Gemini
     async function fetchWithRetry(url, options, maxRetries = 5) {
         const delays = [1000, 2000, 4000, 8000, 16000];
         for (let i = 0; i < maxRetries; i++) {
@@ -940,16 +1096,21 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
     }
 
 
-    // --- BREW LAB INTELIGENTE (Mejorado con barra de progreso) ---
+    // --- BREW LAB INTELIGENTE Y RECETAS ESPECIFICAS ---
     let brewTimer = null;
     let brewSeconds = 0;
     let currentBrewSteps = [];
+    let activeBrewMethodId = 'v60-hoffmann';
     
+    // Recetas específicas incluyendo variables técnicas: Molienda, Temperatura y Recomendación.
     const brewMethodsData = [
-        { id: 'v60', name: 'V60 Estándar', type: 'Filtro', baseRatio: 15 },
-        { id: 'chemex', name: 'Chemex Clásica', type: 'Filtro Grueso', baseRatio: 16 },
-        { id: 'aeropress', name: 'AeroPress Rápido', type: 'Inmersión', baseRatio: 13 },
-        { id: 'kalita', name: 'Kalita Flat Bed', type: 'Filtro Plano', baseRatio: 15 }
+        { id: 'v60-hoffmann', name: 'V60 - James Hoffmann', type: 'Filtro', baseRatio: 15, grind: 'Media-Fina', temp: '98°C', rec: 'Single Origins Claros y Ligeros' },
+        { id: 'v60-tetsu', name: 'V60 - Tetsu 4:6', type: 'Filtro', baseRatio: 15, grind: 'Gruesa', temp: '92°C', rec: 'Cafés con alta acidez (Kenia / Lavados)' },
+        { id: 'wbc-osmotic', name: 'WBC Osmotic Flow', type: 'Filtro Competencia', baseRatio: 14, grind: 'Media', temp: '90°C', rec: 'Geishas y Procesos Naturales' },
+        { id: 'chile-champ', name: 'Fast Flow (Competencia)', type: 'Filtro Competencia', baseRatio: 16, grind: 'Fina', temp: '94°C', rec: 'Procesos Anaeróbicos Exóticos' },
+        { id: 'aeropress', name: 'AeroPress Clásico', type: 'Inmersión', baseRatio: 13, grind: 'Media-Fina', temp: '95°C', rec: 'Blends, Cafés de cuerpo medio' },
+        { id: 'french', name: 'Prensa Francesa', type: 'Inmersión Total', baseRatio: 15, grind: 'Media-Gruesa', temp: '96°C', rec: 'Tuestes Medios/Oscuros, Brasil' },
+        { id: 'moka', name: 'Moka Pot', type: 'Percolación', baseRatio: 10, grind: 'Fina', temp: 'Agua Pre-calentada', rec: 'House Blends / Espresso Roasts' }
     ];
 
     function updateBrewCalc(changedSource) {
@@ -961,6 +1122,7 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
         let ratio = parseFloat(ratioEl.value) || 15;
         let water = parseFloat(waterEl.value) || 225;
 
+        // Lógica Bidireccional
         if (changedSource === 'dose' || changedSource === 'ratio') {
             water = Math.round(dose * ratio);
             waterEl.value = water;
@@ -969,36 +1131,112 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
             doseEl.value = dose;
         }
         
-        generateDynamicSteps(dose, water);
+        generateDynamicSteps(activeBrewMethodId, dose, water);
     }
 
-    function generateDynamicSteps(dose, totalWater) {
-        const bloomWater = Math.round(dose * 3);
-        const remainingWater = totalWater - bloomWater;
-        const pour1 = bloomWater + Math.round(remainingWater * 0.6);
-        const pour2 = totalWater;
-
-        currentBrewSteps = [
-            { time: 0, text: `Bloom: Verter circularmente`, target: `${bloomWater}g` },
-            { time: 45, text: `Vertido Principal: Lento y al centro`, target: `${pour1}g` },
-            { time: 90, text: `Vertido Final: Levantar nivel`, target: `${pour2}g` },
-            { time: 150, text: `Fin del Drenaje. Retirar filtro.`, target: `✓` }
-        ];
-
+    function generateDynamicSteps(methodId, dose, totalWater) {
+        currentBrewSteps = [];
+        
+        // --- LOGICAS ESPECIFICAS POR RECETA ---
+        switch(methodId) {
+            case 'v60-hoffmann':
+                const bloomHoff = Math.round(dose * 2);
+                const pour60 = Math.round(totalWater * 0.6);
+                currentBrewSteps = [
+                    { time: 0, text: `Bloom: Verter agua y agitar el dripper suavemente`, target: `${bloomHoff}g` },
+                    { time: 45, text: `Vertido 1: Verter en círculos rápido hasta el 60%`, target: `${pour60}g` },
+                    { time: 75, text: `Vertido 2: Verter lento hasta alcanzar el total`, target: `${totalWater}g` },
+                    { time: 100, text: `Agitar levemente y dejar drenar`, target: `✓` },
+                    { time: 180, text: `Fin del Drenaje.`, target: `✓` }
+                ];
+                break;
+            case 'v60-tetsu':
+                const portion = Math.round(totalWater / 5);
+                currentBrewSteps = [
+                    { time: 0, text: `Vertido 1 (Acidez): 20% del total`, target: `${portion}g` },
+                    { time: 45, text: `Vertido 2 (Dulzura): Alcanzar 40%`, target: `${portion * 2}g` },
+                    { time: 90, text: `Vertido 3 (Fuerza): Alcanzar 60%`, target: `${portion * 3}g` },
+                    { time: 135, text: `Vertido 4 (Fuerza): Alcanzar 80%`, target: `${portion * 4}g` },
+                    { time: 180, text: `Vertido 5 (Fuerza): Alcanzar 100%`, target: `${totalWater}g` },
+                    { time: 210, text: `Retirar filtro en exactamente 3:30.`, target: `✓` }
+                ];
+                break;
+            case 'wbc-osmotic':
+                const bloomOsmotic = Math.round(dose * 3);
+                const halfWater = Math.round(totalWater / 2);
+                currentBrewSteps = [
+                    { time: 0, text: `Bloom: Concentrado en el centro`, target: `${bloomOsmotic}g` },
+                    { time: 40, text: `Mantener el vertido siempre en la moneda central (Goteo lento)`, target: `${halfWater}g` },
+                    { time: 90, text: `Levantar nivel ligeramente sin tocar los bordes`, target: `${totalWater}g` },
+                    { time: 150, text: `Drenaje completo.`, target: `✓` }
+                ];
+                break;
+            case 'chile-champ':
+                currentBrewSteps = [
+                    { time: 0, text: `Gran Bloom Agresivo (3x Dosis)`, target: `${Math.round(dose*3)}g` },
+                    { time: 30, text: `Vertido pesado circular hasta la mitad de agua`, target: `${Math.round(totalWater/2)}g` },
+                    { time: 60, text: `Verter pesado directo al centro para hundir la cama`, target: `${totalWater}g` },
+                    { time: 120, text: `El drenaje debe ser veloz (Fast Flow).`, target: `✓` }
+                ];
+                break;
+            case 'aeropress':
+                currentBrewSteps = [
+                    { time: 0, text: `Verter toda el agua rápidamente`, target: `${totalWater}g` },
+                    { time: 15, text: `Insertar émbolo y tirar hacia arriba para hacer vacío`, target: `✓` },
+                    { time: 120, text: `Retirar émbolo y agitar suavemente la costra`, target: `✓` },
+                    { time: 150, text: `Presionar suave y lento por 30 segundos`, target: `✓` }
+                ];
+                break;
+            case 'french':
+                currentBrewSteps = [
+                    { time: 0, text: `Verter agua fuertemente para saturar todos los granos`, target: `${totalWater}g` },
+                    { time: 240, text: `Romper la costra (Break the crust) con una cuchara y limpiar espuma`, target: `✓` },
+                    { time: 540, text: `Esperar 5 mins adicionales. No presionar el émbolo al fondo, servir con cuidado`, target: `✓` }
+                ];
+                break;
+            case 'moka':
+                currentBrewSteps = [
+                    { time: 0, text: `Añadir agua pre-calentada a la caldera bajo la válvula de seguridad`, target: `${totalWater}g` },
+                    { time: 20, text: `Llenar canasta de café al ras sin presionar (Tapping leve)`, target: `${dose}g` },
+                    { time: 40, text: `Enroscar fuerte (usar toalla) y poner a fuego bajo-medio`, target: `Fuego Bajo` },
+                    { time: 120, text: `Apenas empiece a gorgotear, retirar del fuego y enfriar base con agua fría.`, target: `Fin` }
+                ];
+                break;
+            default:
+                currentBrewSteps = [
+                    { time: 0, text: `Bloom genérico (3x)`, target: `${Math.round(dose*3)}g` },
+                    { time: 45, text: `Vertido hasta el total`, target: `${totalWater}g` },
+                    { time: 150, text: `Fin.`, target: `✓` }
+                ];
+        }
         renderBrewUI();
     }
 
     function renderBrewUI() {
+        const methodData = brewMethodsData.find(m => m.id === activeBrewMethodId);
+        
         document.getElementById('guide-target').innerHTML = `
             <div class="guide-display reveal active">
-                <div style="display:flex; flex-direction:column; justify-content:center;">
-                    <h2 style="font-family:var(--font-head); font-size:40px; color:var(--accent);">Extracción Dinámica</h2>
-                    <div class="timer-val" id="b-timer">00:00</div>
-                    <div style="width:100%; height:4px; background:rgba(255,255,255,0.2); margin-bottom: 20px;">
-                        <div id="b-progress-bar" style="height:100%; width:0%; background:var(--accent); transition:1s linear;"></div>
+                <div style="display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <h2 style="font-family:var(--font-head); font-size:40px; color:var(--accent);">${methodData.name}</h2>
+                        
+                        <div class="brew-meta-grid" style="margin-top: 20px;">
+                            <div class="meta-box"><span>Molienda</span><strong>${methodData.grind}</strong></div>
+                            <div class="meta-box"><span>Temp. Agua</span><strong>${methodData.temp}</strong></div>
+                            <div class="meta-box" style="grid-column: span 3;"><span>Perfil Recomendado</span><strong>${methodData.rec}</strong></div>
+                        </div>
                     </div>
-                    <button class="btn btn-neon" id="b-btn" onclick="toggleBrewTimer()" style="width:100%;"><i class="fa-solid fa-play"></i> Iniciar Cronómetro</button>
+                    
+                    <div>
+                        <div class="timer-val" id="b-timer">00:00</div>
+                        <div style="width:100%; height:4px; background:rgba(255,255,255,0.2); margin-bottom: 20px;">
+                            <div id="b-progress-bar" style="height:100%; width:0%; background:var(--accent); transition:1s linear;"></div>
+                        </div>
+                        <button class="btn btn-neon" id="b-btn" onclick="toggleBrewTimer()" style="width:100%;"><i class="fa-solid fa-play"></i> Iniciar Cronómetro</button>
+                    </div>
                 </div>
+                
                 <div class="step-list">
                     ${currentBrewSteps.map((s, i) => `
                         <div class="step-item" id="b-step-${i}">
@@ -1028,6 +1266,7 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
         
         btn.innerHTML = "<i class='fa-solid fa-stop'></i> Detener Reloj"; btn.style.background = "#fff"; btn.style.color = "#000";
         let totalDuration = currentBrewSteps[currentBrewSteps.length - 1].time;
+        if(totalDuration === 0) totalDuration = 120; // fallback prevent divide by zero
         
         brewTimer = setInterval(() => {
             brewSeconds++;
@@ -1051,12 +1290,26 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
 
     function initBrewLab() {
         document.getElementById('guide-nav').innerHTML = brewMethodsData.map(m => `
-            <div class="guide-opt" onclick="document.getElementById('calc-ratio').value=${m.baseRatio}; updateBrewCalc('ratio');">
+            <div class="guide-opt" onclick="selectBrewMethod('${m.id}')" id="nav-method-${m.id}">
                 <div><strong>${m.name}</strong><br><span style="font-size:10px; color:#888; font-family:var(--font-mono);">${m.type}</span></div>
                 <i class="fa-solid fa-chevron-right" style="color:var(--accent);"></i>
             </div>
         `).join('');
-        updateBrewCalc('dose');
+        selectBrewMethod(brewMethodsData[0].id);
+    }
+
+    function selectBrewMethod(id) {
+        document.querySelectorAll('.guide-opt').forEach(el => el.classList.remove('active'));
+        document.getElementById(`nav-method-${id}`).classList.add('active');
+        
+        activeBrewMethodId = id;
+        const methodData = brewMethodsData.find(m => m.id === id);
+        
+        // Reset timer if running
+        if(brewTimer) toggleBrewTimer();
+        
+        document.getElementById('calc-ratio').value = methodData.baseRatio;
+        updateBrewCalc('ratio');
     }
 
     // --- ENRUTADOR SPA ---
@@ -1093,6 +1346,14 @@ Es OBLIGATORIO que recomiendes solo IDs que existan en el catálogo proporcionad
             }
             if(route === 'shop') filterShop('all'); 
             if(route === 'lab') initBrewLab();
+            if(route === 'oracle') {
+                // Reiniciar todo en el Oráculo al entrar
+                setOracleMode('manual');
+                setOracleStep(1);
+                oracleData = { method: '', acidity: '', flavor: '' };
+                document.getElementById('ai-oracle-input').value = '';
+                document.getElementById('ai-oracle-results').style.display = 'none';
+            }
         }
         window.scrollTo({ top: 0, behavior: 'instant' });
         setTimeout(() => { document.querySelectorAll('.view.active .reveal').forEach(el => el.classList.add('active')); }, 50);
